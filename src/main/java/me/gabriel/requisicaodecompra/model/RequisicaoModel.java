@@ -50,7 +50,7 @@ public class RequisicaoModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
     @JoinColumn(name = "departamento_id")
-    private DepartamentoEnum departamento = criadoPor.getDepartamento();
+    private DepartamentoEnum departamento;
 
     @OneToMany(mappedBy = "requisicao", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemModel> itens = new ArrayList<>();
