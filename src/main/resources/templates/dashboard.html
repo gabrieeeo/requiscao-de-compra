@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+    
+    <section layout:fragment="content">
+        <div class="dashboard">
+            <div class="dashboard-header">
+                <h2>Dashboard</h2>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 th:text="${totalRequisicoes ?: '0'}">0</h3>
+                            <p>Total</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon pending">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 th:text="${requisicoesPendentes ?: '0'}">0</h3>
+                            <p>Pendentes</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon approved">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 th:text="${requisicoesAprovadas ?: '0'}">0</h3>
+                            <p>Aprovadas</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon inquotation">
+                            <i class="fas fa-money-check-dollar"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 th:text="${requisicoesEmCotacao ?: '0'}">0</h3>
+                            <p>Em cotação</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon finished">
+                            <i class="fas fa-flag-checkered"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 th:text="${requisicoesFinalizadas ?: '0'}">0</h3>
+                            <p>Finalizadas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</html>

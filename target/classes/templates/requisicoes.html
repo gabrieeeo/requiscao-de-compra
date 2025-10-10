@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
+<section layout:fragment="content">
+    <div class="page-header">
+        <h2>Requisições de Compra</h2>
+        <a href="/nova-requisicao" class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+            Nova Requisição
+        </a>
+    </div>
+
+    <div class="filters">
+        <form method="get" action="/requisicoes" class="filter-form">
+            <div class="filter-group">
+                <label for="status">Status:</label>
+                <select name="status" id="status">
+                    <option value="">Todos</option>
+                    <option value="PENDENTE" th:selected="${param.status == 'PENDENTE'}">Pendente</option>
+                    <option value="APROVADA" th:selected="${param.status == 'APROVADA'}">Aprovada</option>
+                    <option value="REJEITADA" th:selected="${param.status == 'REJEITADA'}">Rejeitada</option>
+                    <option value="EM_COTACAO" th:selected="${param.status == 'EM_COTACAO'}">Em Cotação</option>
+                    <option value="PEDIDO_REALIZADO" th:selected="${param.status == 'PEDIDO_REALIZADO'}">Pedido
+                        Realizado</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="departamento">Departamento:</label>
+                <select name="departamento" id="departamento">
+                    <option value="">Todos</option>
+                    <option th:each="dept : ${departamentos}" th:value="${dept}" th:text="${dept}"
+                        th:selected="${param.departamento == dept}">Departamento</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="search">Buscar:</label>
+                <input type="text" name="search" id="search" placeholder="Código ou nome..." th:value="${param.search}">
+            </div>
+            <button type="submit" class="btn btn-secondary">
+                <i class="fas fa-search"></i>
+                Filtrar
+            </button>
+        </form>
+    </div>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Status</th>
+                    <th>Departamento</th>
+                    <th>Criado por</th>
+                    <th>Data de Criação</th>
+                    <th>Prazo de Entrega</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="requisicao : ${requisicoes}">
+                    <td th:text="${requisicao.codigo}">REQ-001</td>
+                    <td th:text="${requisicao.nome}">Material de Escritório</td>
+                    <td>
+                        <span class="status-badge" th:classappend="${requisicao.status}"
+                            th:text="${requisicao.status}">Pendente</span>
+                    </td>
+                    <td th:text="${requisicao.departamento}">TI</td>
+                    <td th:text="${requisicao.criadoPor}">João Silva</td>
+                    <td th:text="${#temporals.format(requisicao.criadoEm, 'dd/MM/yyyy')}">15/01/2024</td>
+                    <td th:text="${#temporals.format(requisicao.prazoEntrega, 'dd/MM/yyyy')}">30/01/2024</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a th:href="@{/requisicoes/{id}(id=${requisicao.id})}" class="btn btn-sm btn-primary"
+                                title="Visualizar">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a th:href="@{/requisicoes/{id}/editar(id=${requisicao.id})}"
+                                class="btn btn-sm btn-secondary" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="btn btn-sm btn-danger"
+                                onclick="confirmarExclusao('[[${requisicao.codigo}]]', '[[${requisicao.id}]]')"
+                                title="Excluir">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(requisicoes)}">
+                    <td colspan="8" class="text-center">Nenhuma requisição encontrada</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginação -->
+    <div class="pagination" th:if="${totalPages > 1}">
+        <a th:if="${currentPage > 0}"
+            th:href="@{/requisicoes(page=${currentPage - 1}, status=${param.status}, departamento=${param.departamento}, search=${param.search})}"
+            class="btn btn-secondary">
+            <i class="fas fa-chevron-left"></i>
+            Anterior
+        </a>
+
+        <span class="page-info">
+            Página <span th:text="${currentPage + 1}">1</span> de <span th:text="${totalPages}">1</span>
+        </span>
+
+        <a th:if="${currentPage < totalPages - 1}"
+            th:href="@{/requisicoes(page=${currentPage + 1}, status=${param.status}, departamento=${param.departamento}, search=${param.search})}"
+            class="btn btn-secondary">
+            Próxima
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </div>
+
+    <!-- Modal de confirmação de exclusão -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmar Exclusão</h3>
+                <span class="close" onclick="fecharModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir a requisição <strong id="codigoRequisicao"></strong>?</p>
+                <p class="warning">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</section>
+
+</html>
