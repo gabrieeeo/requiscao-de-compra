@@ -2,6 +2,7 @@ package me.gabriel.requisicaodecompra.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class Controllers {
@@ -19,5 +20,10 @@ public class Controllers {
     @GetMapping("/nova-requisicao")
     public String novaRequisicao() {
         return "nova-requisicao";
+    }
+
+    @GetMapping("/detalhes-requisicao/")
+    public String detalhesRequisicao() {
+        return "detalhes-requisicao";
     }
 }

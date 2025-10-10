@@ -5,10 +5,6 @@
 <section layout:fragment="content">
     <div class="page-header">
         <h2>Requisições de Compra</h2>
-        <a href="/nova-requisicao" class="btn btn-primary">
-            <i class="fas fa-plus"></i>
-            Nova Requisição
-        </a>
     </div>
 
     <div class="filters">
@@ -18,11 +14,9 @@
                 <select name="status" id="status">
                     <option value="">Todos</option>
                     <option value="PENDENTE" th:selected="${param.status == 'PENDENTE'}">Pendente</option>
+                    <option value="EM_COTACAO" th:selected="${param.status == 'EM_COTACAO'}">Em Cotação</option>
                     <option value="APROVADA" th:selected="${param.status == 'APROVADA'}">Aprovada</option>
                     <option value="REJEITADA" th:selected="${param.status == 'REJEITADA'}">Rejeitada</option>
-                    <option value="EM_COTACAO" th:selected="${param.status == 'EM_COTACAO'}">Em Cotação</option>
-                    <option value="PEDIDO_REALIZADO" th:selected="${param.status == 'PEDIDO_REALIZADO'}">Pedido
-                        Realizado</option>
                 </select>
             </div>
             <div class="filter-group">
@@ -35,9 +29,9 @@
             </div>
             <div class="filter-group">
                 <label for="search">Buscar:</label>
-                <input type="text" name="search" id="search" placeholder="Código ou nome..." th:value="${param.search}">
+                <input type="text" name="search" id="search" placeholder="Código ou nome do solicitante..." th:value="${param.search}">
             </div>
-            <button type="submit" class="btn btn-secondary">
+            <button type="submit" class="" style="width: 150px;">
                 <i class="fas fa-search"></i>
                 Filtrar
             </button>
@@ -49,7 +43,6 @@
             <thead>
                 <tr>
                     <th>Código</th>
-                    <th>Nome</th>
                     <th>Status</th>
                     <th>Departamento</th>
                     <th>Criado por</th>
@@ -61,7 +54,6 @@
             <tbody>
                 <tr th:each="requisicao : ${requisicoes}">
                     <td th:text="${requisicao.codigo}">REQ-001</td>
-                    <td th:text="${requisicao.nome}">Material de Escritório</td>
                     <td>
                         <span class="status-badge" th:classappend="${requisicao.status}"
                             th:text="${requisicao.status}">Pendente</span>

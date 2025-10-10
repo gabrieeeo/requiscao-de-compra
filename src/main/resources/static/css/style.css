@@ -97,7 +97,6 @@ body {
     align-items: center;
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid #e9ecef;
 }
 
 .page-header h2 {
@@ -229,7 +228,7 @@ body {
 }
 
 .table th {
-    background: linear-gradient(135deg, #34495e, #2c3e50);
+    background: #1A1D20;
     color: white;
     padding: 1rem;
     text-align: left;
@@ -327,12 +326,11 @@ body {
 }
 
 .btn-secondary {
-    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+    background: gray;
     color: white;
 }
 
 .btn-secondary:hover {
-    background: linear-gradient(135deg, #7f8c8d, #6c7b7d);
     transform: translateY(-1px);
 }
 
