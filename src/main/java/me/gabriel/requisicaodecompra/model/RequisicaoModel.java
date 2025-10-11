@@ -47,9 +47,7 @@ public class RequisicaoModel {
     @JoinColumn(name = "criado_por_id")
     private UsuarioModel criadoPor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
-    @JoinColumn(name = "departamento_id")
     private DepartamentoEnum departamento;
 
     @OneToMany(mappedBy = "requisicao", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
