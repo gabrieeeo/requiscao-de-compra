@@ -19,6 +19,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import me.gabriel.requisicaodecompra.enums.DepartamentoEnum;
 import me.gabriel.requisicaodecompra.enums.StatusEnum;
@@ -56,6 +57,7 @@ public class RequisicaoModel {
     @CreationTimestamp
     private LocalDateTime dataCriacao;
 
+    @PrePersist
     public void prePersist() {
         if (this.codigo == null) {
             this.codigo = "REQ-" + String.format("%04d", this.id);
