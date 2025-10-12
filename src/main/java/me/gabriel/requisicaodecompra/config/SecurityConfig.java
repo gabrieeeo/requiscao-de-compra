@@ -25,7 +25,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
 
         //Recursos público/gerais
-        .requestMatchers("/css/**", "/js/**", "").permitAll()
+        .requestMatchers("/css/**", "/js/**").permitAll()
         .requestMatchers("/login/**", "/error/**").permitAll()
         //Apenas admnistradores do sistema (ADMIN)
         .requestMatchers("/usuarios/**").hasRole("ADMIN")
