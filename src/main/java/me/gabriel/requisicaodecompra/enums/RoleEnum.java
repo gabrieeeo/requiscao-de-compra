@@ -4,7 +4,7 @@ public enum RoleEnum {
 
     ADMIN("Administrador"),
     COMPRADOR("Comprador"),
-    FUNCIONARIO("Funcionário");
+    USUARIO("Usuário");
 
     private String descricao;
 
