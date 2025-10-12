@@ -8,32 +8,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import me.gabriel.requisicaodecompra.service.user.UsuarioDetailsService;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-
-    private UsuarioDetailsService usuarioDetailsService;
-    
-
-    public SecurityConfig(UsuarioDetailsService usuarioDetailsService) {
-        this.usuarioDetailsService = usuarioDetailsService;
-    }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public UsuarioDetailsService usuarioDetailsService() {
-        return this.usuarioDetailsService;
     }
 
     @Bean
