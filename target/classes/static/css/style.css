@@ -316,12 +316,12 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #3498db, #2980b9);
+    background: #2c3e50;
     color: white;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #2980b9, #1f618d);
+    background: #425b72;
     transform: translateY(-1px);
 }
 
@@ -687,7 +687,6 @@ body {
 .text-right {
     text-align: right;
 }
-
 
 /* Responsive design */
 @media (max-width: 768px) {
