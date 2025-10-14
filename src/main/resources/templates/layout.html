@@ -27,7 +27,9 @@
             <div class="header-user">
                 <div class="user-info">
                     <i class="fas fa-user-circle user-icon"></i>
-                    <span class="user-name" sec:authentication="name">Nome</span>
+                    <span th:if="${usuarioLogado}" class="user-name" 
+                    th:text="${usuarioLogado.nome}">Nome</span>
+                    <span th:unless="${usuarioLogado}" th:text="${#authentication.name}">Usuário</span>
                 </div>
                 <form th:action="@{/logout}" method="post" class="logout-form">
                     <button type="submit" class="btn btn-danger btn-sm">

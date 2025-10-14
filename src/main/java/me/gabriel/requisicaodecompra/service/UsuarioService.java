@@ -1,5 +1,7 @@
 package me.gabriel.requisicaodecompra.service;
 
+import java.util.Optional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +26,9 @@ public class UsuarioService {
             "glima", "suporte@mailacosmeticos.com.br", passwordEncoder.encode("16022006"), RoleEnum.ADMIN);
             usuarioRepository.save(usuario);
         }
+    }
+
+    public Optional<UsuarioModel> findByUsername(String username) {
+        return usuarioRepository.findByUsername(username);
     }
 }
