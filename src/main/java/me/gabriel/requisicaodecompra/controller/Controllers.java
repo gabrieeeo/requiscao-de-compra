@@ -11,15 +11,7 @@ public class Controllers {
         return "inicio/dashboard";
     }
 
-    @GetMapping("/requisicoes")
-    public String requisicoes() {
-        return "requisicoes/requisicoes";
-    }
-
-    @GetMapping("/nova-requisicao")
-    public String novaRequisicao() {
-        return "requisicoes/nova-requisicao";
-    }
+    
 
     @GetMapping("/detalhes-requisicao/")
     public String detalhesRequisicao() {

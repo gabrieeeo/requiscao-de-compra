@@ -21,6 +21,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import me.gabriel.requisicaodecompra.enums.DepartamentoEnum;
 import me.gabriel.requisicaodecompra.enums.StatusEnum;
 
@@ -37,8 +42,12 @@ public class RequisicaoModel {
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
+    @NotNull(message = "Prazo de entrega é obrigatório")
+    @FutureOrPresent(message = "Prazo de entrega não pode ser no passado")
     private LocalDate prazoEntrega;
 
+    @NotBlank(message = "Finalidade é obrigatória")
+    @Size(max = 500, message = "Finalidade pode ter no máximo 500 caracteres")
     private String finalidadeDaCompra;
 
     private String pedidoDeCompra;
@@ -49,9 +58,11 @@ public class RequisicaoModel {
     private UsuarioModel criadoPor;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Departamento é obrigatório")
     private DepartamentoEnum departamento;
 
     @OneToMany(mappedBy = "requisicao", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Valid
     private List<ItemModel> itens = new ArrayList<>();
 
     @CreationTimestamp

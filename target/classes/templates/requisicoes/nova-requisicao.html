@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layout}">
-
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Nova Requisição</title>
+    <meta charset="UTF-8" />
+</head>
+<body>
 <section layout:fragment="content">
-
     <div class="page-header">
         <h2>Nova Requisição de Compra</h2>
         <a href="/requisicoes" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i>
-            Voltar
+            <i class="fas fa-arrow-left"></i> Voltar
         </a>
     </div>
 
@@ -17,47 +18,31 @@
             <h3>Informações Básicas</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="nome">Nome da Requisição *</label>
-                    <input type="text" id="nome" th:field="*{nome}" required placeholder="Ex: Material de Escritório">
-                    <div class="error-message" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
-                </div>
-                <div class="form-group">
                     <label for="departamento">Departamento *</label>
                     <select id="departamento" th:field="*{departamento}" required>
                         <option value="">Selecione o departamento</option>
-                        <option value="TI">TI</option>
-                        <option value="RH">Recursos Humanos</option>
-                        <option value="FINANCEIRO">Financeiro</option>
-                        <option value="COMERCIAL">Comercial</option>
-                        <option value="PRODUCAO">Produção</option>
-                        <option value="QUALIDADE">Qualidade</option>
-                        <option value="ADMINISTRATIVO">Administrativo</option>
+                        <option th:each="dep : ${departamentos}" th:value="${dep}" th:text="${dep}"></option>
                     </select>
-                    <div class="error-message" th:if="${#fields.hasErrors('departamento')}" th:errors="*{departamento}">
-                    </div>
+                    <div class="error-message" th:if="${#fields.hasErrors('departamento')}" th:errors="*{departamento}"></div>
+                </div>
+                <div class="form-group">
+                    <label for="prazoEntrega">Prazo de Entrega *</label>
+                    <input type="date" id="prazoEntrega" th:field="*{prazoEntrega}" required>
+                    <div class="error-message" th:if="${#fields.hasErrors('prazoEntrega')}" th:errors="*{prazoEntrega}"></div>
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group">
-                    <label for="finalidade">Finalidade *</label>
-                    <textarea id="finalidade" th:field="*{finalidade}" required
-                        placeholder="Descreva a finalidade da requisição" rows="3"></textarea>
-                    <div class="error-message" th:if="${#fields.hasErrors('finalidade')}" th:errors="*{finalidade}">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="prazoEntrega">Prazo de Entrega *</label>
-                        <input type="date" id="prazoEntrega" th:field="*{prazoEntrega}" required>
-                        <div class="error-message" th:if="${#fields.hasErrors('prazoEntrega')}"
-                            th:errors="*{prazoEntrega}"></div>
-                    </div>
+                <div class="form-group full-width">
+                    <label for="finalidadeDaCompra">Finalidade *</label>
+                    <textarea id="finalidadeDaCompra" th:field="*{finalidadeDaCompra}" required placeholder="Descreva a finalidade da requisição" rows="3"></textarea>
+                    <div class="error-message" th:if="${#fields.hasErrors('finalidadeDaCompra')}" th:errors="*{finalidadeDaCompra}"></div>
                 </div>
             </div>
         </div>
 
         <div class="form-section">
             <h3>Itens da Requisição</h3>
+            <small>Pelo menos um item é obrigatório.</small>
             <div id="itens-container">
                 <div class="item-row" data-item-index="0">
                     <div class="form-group">
@@ -69,45 +54,26 @@
                         <input type="number" name="itens[0].quantidade" required min="1" placeholder="Qtd">
                     </div>
                     <div class="form-group">
-                        <label>Descrição</label>
-                        <input type="text" name="itens[0].descricao" placeholder="Descrição adicional">
+                        <label>Unidade</label>
+                        <input type="text" name="itens[0].unidadeMedida" placeholder="Ex: UN, KG">
                     </div>
                     <div class="form-group">
                         <label>&nbsp;</label>
-                        <button type="button" class="btn btn-danger btn-sm" onclick="removerItem(0)"
-                            style="display: none;">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="removerItem(0)" style="display: none;">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-secondary" onclick="adicionarItem()">
-                <i class="fas fa-plus"></i>
-                Adicionar Item
-            </button>
-        </div>
-
-        <div class="form-section">
-            <h3>Informações Adicionais</h3>
-            <div class="form-group">
-                <label for="observacoes">Observações</label>
-                <textarea id="observacoes" th:field="*{observacoes}"
-                    placeholder="Observações adicionais sobre a requisição" rows="4"></textarea>
-            </div>
+            <button type="button" class="btn btn-secondary" onclick="adicionarItem()"><i class="fas fa-plus"></i> Adicionar Item</button>
         </div>
 
         <div class="form-actions">
-            <button type="button" class="btn btn-secondary" onclick="window.location.href='/requisicoes'">
-                Cancelar
-            </button>
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i>
-                Salvar Requisição
-            </button>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='/requisicoes'">Cancelar</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Salvar Requisição</button>
         </div>
     </form>
 
-    <script src="js/main.js"></script>
     <script>
         let itemIndex = 1;
 
@@ -116,88 +82,63 @@
             const newItem = document.createElement('div');
             newItem.className = 'item-row';
             newItem.setAttribute('data-item-index', itemIndex);
-
             newItem.innerHTML = `
                 <div class="form-group">
                     <label>Item *</label>
-                    <input type="text" name="itens[${itemIndex}].nome" required 
-                           placeholder="Nome do item">
+                    <input type="text" name="itens[${itemIndex}].nome" required placeholder="Nome do item">
                 </div>
                 <div class="form-group">
                     <label>Quantidade *</label>
-                    <input type="number" name="itens[${itemIndex}].quantidade" required min="1" 
-                           placeholder="Qtd">
+                    <input type="number" name="itens[${itemIndex}].quantidade" required min="1" placeholder="Qtd">
                 </div>
                 <div class="form-group">
-                    <label>Descrição</label>
-                    <input type="text" name="itens[${itemIndex}].descricao" 
-                           placeholder="Descrição adicional">
+                    <label>Unidade</label>
+                    <input type="text" name="itens[${itemIndex}].unidadeMedida" placeholder="Ex: UN, CX">
                 </div>
                 <div class="form-group">
                     <label>&nbsp;</label>
                     <button type="button" class="btn btn-danger btn-sm" onclick="removerItem(${itemIndex})">
                         <i class="fas fa-trash"></i>
                     </button>
-                </div>
-            `;
-
+                </div>`;
             container.appendChild(newItem);
             itemIndex++;
-
-            // Mostrar botão de remover no primeiro item se houver mais de um
             atualizarBotoesRemover();
         }
 
         function removerItem(index) {
-            const item = document.querySelector(`[data-item-index="${index}"]`);
-            if (item) {
-                item.remove();
+            const row = document.querySelector(`[data-item-index="${index}"]`);
+            if (row) {
+                row.remove();
                 atualizarBotoesRemover();
             }
         }
 
         function atualizarBotoesRemover() {
-            const items = document.querySelectorAll('.item-row');
-            items.forEach((item, index) => {
-                const removeBtn = item.querySelector('.btn-danger');
-                if (items.length > 1) {
-                    removeBtn.style.display = 'block';
-                } else {
-                    removeBtn.style.display = 'none';
-                }
+            const rows = document.querySelectorAll('.item-row');
+            rows.forEach(r => {
+                const btn = r.querySelector('.btn-danger');
+                btn.style.display = rows.length > 1 ? 'block' : 'none';
             });
         }
 
-        // Validação do formulário
-        document.getElementById('requisicaoForm').addEventListener('submit', function (e) {
-            const nome = document.getElementById('nome').value.trim();
+        document.getElementById('requisicaoForm').addEventListener('submit', e => {
             const departamento = document.getElementById('departamento').value;
-            const finalidade = document.getElementById('finalidade').value.trim();
-            const prazoEntrega = document.getElementById('prazoEntrega').value;
-
-            if (!nome || !departamento || !finalidade || !prazoEntrega) {
+            const finalidade = document.getElementById('finalidadeDaCompra').value.trim();
+            const prazo = document.getElementById('prazoEntrega').value;
+            if (!departamento || !finalidade || !prazo) {
                 e.preventDefault();
-                alert('Por favor, preencha todos os campos obrigatórios.');
+                alert('Preencha os campos obrigatórios.');
                 return;
             }
-
-            // Verificar se há pelo menos um item
-            const itens = document.querySelectorAll('input[name*=".nome"]');
-            let temItemValido = false;
-
-            itens.forEach(item => {
-                if (item.value.trim()) {
-                    temItemValido = true;
-                }
-            });
-
-            if (!temItemValido) {
+            const itens = document.querySelectorAll('#itens-container input[name$=".nome"]');
+            const valid = Array.from(itens).some(i => i.value.trim());
+            if (!valid) {
                 e.preventDefault();
-                alert('Por favor, adicione pelo menos um item à requisição.');
-                return;
+                alert('Informe ao menos um item.');
             }
         });
     </script>
 </section>
-
+</body>
 </html>
