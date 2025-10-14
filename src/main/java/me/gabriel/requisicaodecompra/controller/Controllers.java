@@ -8,21 +8,21 @@ public class Controllers {
 
     @GetMapping("/")
     public String dashboard() {
-        return "dashboard";
+        return "inicio/dashboard";
     }
 
     @GetMapping("/requisicoes")
     public String requisicoes() {
-        return "requisicoes";
+        return "requisicoes/requisicoes";
     }
 
     @GetMapping("/nova-requisicao")
     public String novaRequisicao() {
-        return "nova-requisicao";
+        return "requisicoes/nova-requisicao";
     }
 
     @GetMapping("/detalhes-requisicao/")
     public String detalhesRequisicao() {
-        return "detalhes-requisicao";
+        return "requisicoes/detalhes-requisicao";
     }
 }

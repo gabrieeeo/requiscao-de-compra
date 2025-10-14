@@ -1,0 +1,28 @@
+package me.gabriel.requisicaodecompra.service;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import me.gabriel.requisicaodecompra.enums.RoleEnum;
+import me.gabriel.requisicaodecompra.model.UsuarioModel;
+import me.gabriel.requisicaodecompra.repository.UsuarioRepository;
+
+@Service
+public class UsuarioService {
+
+    private UsuarioRepository usuarioRepository;
+    private PasswordEncoder passwordEncoder;
+
+    public UsuarioService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
+    }
+
+    public void criarUsuarioAdmin() {
+        if (usuarioRepository.findByUsername("glima").isEmpty()) {
+            UsuarioModel usuario = new UsuarioModel("Gabriel Lima", 
+            "glima", "suporte@mailacosmeticos.com.br", passwordEncoder.encode("16022006"), RoleEnum.ADMIN);
+            usuarioRepository.save(usuario);
+        }
+    }
+}

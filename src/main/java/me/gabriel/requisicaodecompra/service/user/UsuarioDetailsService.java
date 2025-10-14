@@ -23,5 +23,4 @@ public class UsuarioDetailsService implements UserDetailsService{
         .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
         return usuario;
     }
-
 }
