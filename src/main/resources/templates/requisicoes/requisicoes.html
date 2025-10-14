@@ -60,7 +60,7 @@
                     </td>
                     <td th:text="${requisicao.departamento}">TI</td>
                     <td th:text="${requisicao.criadoPor}">João Silva</td>
-                    <td th:text="${#temporals.format(requisicao.criadoEm, 'dd/MM/yyyy')}">15/01/2024</td>
+                    <td th:text="${#temporals.format(requisicao.dataCriacao, 'dd/MM/yyyy')}">15/01/2024</td>
                     <td th:text="${#temporals.format(requisicao.prazoEntrega, 'dd/MM/yyyy')}">30/01/2024</td>
                     <td>
                         <div class="action-buttons">

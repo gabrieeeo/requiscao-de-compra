@@ -1,6 +1,7 @@
 package me.gabriel.requisicaodecompra.service;
 
 import java.time.Year;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +18,13 @@ public class RequisicaoService {
         this.requisicaoRepository = requisicaoRepository;
     }
 
+    public List<RequisicaoModel> findAll() {
+        return requisicaoRepository.findAll();
+    }
+
     public String gerarCodigoSequencial() {
-        int ano = Year.now().getValue();
-        long qtdNoAno = requisicaoRepository.countByAno(ano) + 1; // próximo número
-        return String.format("REQ-%d-%04d", ano, qtdNoAno);
+        ultimoNumero++;
+        return String.format("REQ-%d", ultimoNumero);
     }
 
     @Transactional

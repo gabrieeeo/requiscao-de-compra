@@ -27,7 +27,8 @@ public class RequisicaoController {
     }
 
     @GetMapping("/requisicoes")
-    public String requisicoes() {
+    public String requisicoes(Model model) {
+        model.addAttribute("requisicoes", requisicaoService.findAll());
         return "requisicoes/requisicoes";
     }
 
