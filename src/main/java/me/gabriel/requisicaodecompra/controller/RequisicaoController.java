@@ -81,16 +81,6 @@ public class RequisicaoController {
         return "requisicoes/detalhes-requisicao";
     }
 
-    @PostMapping("/requisicoes/{id}/aprovar")
-    public String aprovar(@PathVariable Long id) {
-        RequisicaoModel r = requisicaoService.findById(id);
-        if (r != null && r.getStatus() == StatusEnum.PENDENTE) {
-            r.setStatus(StatusEnum.EM_COTACAO);
-            requisicaoService.save(r);
-        }
-        return "redirect:/requisicoes/{id}";
-    }
-
     @PostMapping("/requisicoes/{id}/rejeitar")
     public String rejeitar(@PathVariable Long id) {
         RequisicaoModel r = requisicaoService.findById(id);
@@ -111,8 +101,8 @@ public class RequisicaoController {
         return "redirect:/requisicoes/{id}";
     }
 
-    @PostMapping("/requisicoes/{id}/realizar-pedido")
-    public String realizarPedido(@PathVariable Long id) {
+    @PostMapping("/requisicoes/{id}/finalizar")
+    public String finalizar(@PathVariable Long id) {
         RequisicaoModel r = requisicaoService.findById(id);
         if (r != null && r.getStatus() == StatusEnum.EM_COTACAO) {
             r.setStatus(StatusEnum.FINALIZADA);
