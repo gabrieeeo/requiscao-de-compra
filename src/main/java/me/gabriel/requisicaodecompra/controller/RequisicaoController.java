@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.validation.Valid;
 import me.gabriel.requisicaodecompra.enums.DepartamentoEnum;
+import me.gabriel.requisicaodecompra.enums.StatusEnum;
 import me.gabriel.requisicaodecompra.model.ItemModel;
 import me.gabriel.requisicaodecompra.model.RequisicaoModel;
 import me.gabriel.requisicaodecompra.service.RequisicaoService;
@@ -43,7 +44,8 @@ public class RequisicaoController {
     }
 
     @PostMapping("/requisicoes")
-    public String salvar(@ModelAttribute("requisicao") @Valid RequisicaoModel requisicao, BindingResult result, Model model, Authentication authentication) {
+    public String salvar(@ModelAttribute("requisicao") @Valid RequisicaoModel requisicao, BindingResult result,
+            Model model, Authentication authentication) {
         if (result.hasErrors()) {
             model.addAttribute("departamentos", DepartamentoEnum.values());
             return "requisicoes/nova-requisicao";
@@ -53,11 +55,12 @@ public class RequisicaoController {
             itens.removeIf(i -> (i.getNome() == null || i.getNome().isBlank()));
             itens.forEach(i -> i.setRequisicao(requisicao));
         }
-        
-        if (authentication != null && authentication.getPrincipal() instanceof me.gabriel.requisicaodecompra.model.UsuarioModel usuario) {
+
+        if (authentication != null
+                && authentication.getPrincipal() instanceof me.gabriel.requisicaodecompra.model.UsuarioModel usuario) {
             requisicao.setCriadoPor(usuario);
         }
-        requisicaoService.salvarNova(requisicao);
+        requisicaoService.save(requisicao);
         return "redirect:/requisicoes";
     }
 
@@ -76,5 +79,45 @@ public class RequisicaoController {
         requisicao.getStatus().name();
         model.addAttribute("requisicao", requisicao);
         return "requisicoes/detalhes-requisicao";
+    }
+
+    @PostMapping("/requisicoes/{id}/aprovar")
+    public String aprovar(@PathVariable Long id) {
+        RequisicaoModel r = requisicaoService.findById(id);
+        if (r != null && r.getStatus() == StatusEnum.PENDENTE) {
+            r.setStatus(StatusEnum.EM_COTACAO);
+            requisicaoService.save(r);
+        }
+        return "redirect:/requisicoes/{id}";
+    }
+
+    @PostMapping("/requisicoes/{id}/rejeitar")
+    public String rejeitar(@PathVariable Long id) {
+        RequisicaoModel r = requisicaoService.findById(id);
+        if (r != null && r.getStatus() != StatusEnum.FINALIZADA) {
+            r.setStatus(StatusEnum.REJEITADA);
+            requisicaoService.save(r);
+        }
+        return "redirect:/requisicoes/{id}";
+    }
+
+    @PostMapping("/requisicoes/{id}/iniciar-cotacao")
+    public String iniciarCotacao(@PathVariable Long id) {
+        RequisicaoModel r = requisicaoService.findById(id);
+        if (r != null) {
+            r.setStatus(StatusEnum.EM_COTACAO);
+            requisicaoService.save(r);
+        }
+        return "redirect:/requisicoes/{id}";
+    }
+
+    @PostMapping("/requisicoes/{id}/realizar-pedido")
+    public String realizarPedido(@PathVariable Long id) {
+        RequisicaoModel r = requisicaoService.findById(id);
+        if (r != null && r.getStatus() == StatusEnum.EM_COTACAO) {
+            r.setStatus(StatusEnum.FINALIZADA);
+            requisicaoService.save(r);
+        }
+        return "redirect:/requisicoes/{id}";
     }
 }

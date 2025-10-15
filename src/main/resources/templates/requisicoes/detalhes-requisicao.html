@@ -1,169 +1,192 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" 
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
-    <section layout:fragment="content">
-        <main class="main">
-            <div class="container">
-                <div class="page-header">
-                    <h2 th:text="'Requisição ' + ${requisicao.codigo}">Requisição REQ-001</h2>
-                    <div class="header-actions">
-                        <a th:href="@{/requisicoes}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i>
-                            Voltar
-                        </a>
-                    </div>
-                </div>
-                <div class="requisicao-details">
-                    <div class="details-grid">
-                        <div class="detail-card">
-                            <h3>Informações Básicas</h3>
-                            <div class="detail-row">
-                                <span class="label">Código:</span>
-                                <span class="value" th:text="${requisicao.codigo}">REQ-001</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="label">Status:</span>
-                                <span class="status-badge" th:classappend="${requisicao.status}" th:text="${requisicao.status}">Pendente</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="label">Departamento:</span>
-                                <span class="value" th:text="${requisicao.departamento}">TI</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="label">Criado por:</span>
-                                <span class="value" th:text="${requisicao.getNomeUsuario}">João Silva</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="label">Data de Criação:</span>
-                                <span class="value" th:text="${#temporals.format(requisicao.dataCriacao, 'dd/MM/yyyy HH:mm')}">15/01/2024 10:30</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="label">Prazo de Entrega:</span>
-                                <span class="value" th:text="${#temporals.format(requisicao.prazoEntrega, 'dd/MM/yyyy')}">30/01/2024</span>
-                            </div>
-                        </div>
-                        <div class="detail-card">
-                            <h3>Finalidade</h3>
-                            <p th:text="${requisicao.finalidadeDaCompra}">Aquisição de material de escritório para o departamento de TI.</p>
-                        </div>
-                    </div>
-                    <div class="items-section">
-                        <h3>Itens da Requisição</h3>
-                        <div class="table-container">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Item</th>
-                                        <th>Quantidade</th>
-                                        <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 1</th>
-                                        <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 2</th>
-                                        <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 3</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                    <tr th:each="item : ${requisicao.itens}">
-                                        <td th:text="${item.nome}">Papel A4</td>
-                                        <td th:text="${item.quantidade + ' ' + item.unidadeMedida}">10</td>
-                                        <td th:if="${requisicao.status.name() == 'EM_COTACAO'}">
-                                            <input type="text" class="form-control" th:value="${item.cotacao1}">
-                                        </td>
-                                        <td th:if="${requisicao.status.name() == 'EM_COTACAO'}">
-                                            <input type="text" class="form-control" th:value="${item.cotacao2}">
-                                        </td>
-                                        <td th:if="${requisicao.status.name() == 'EM_COTACAO'}">
-                                            <input type="text" class="form-control" th:value="${item.cotacao3}">
-                                        </td>
-                                    </tr>
-                                    <tr th:if="${#lists.isEmpty(requisicao.itens)}">
-                                        <td th:attr="colspan=${requisicao.status.name() == 'EM_COTACAO'} ? 5 : 3" class="text-center">Nenhum item cadastrado</td>
-                                    </tr>
-                                    
-                                </tbody>
-                                
-                            </table>
-                            
-                        </div>
-                        <div th:if="${requisicao.status.name() == 'EM_COTACAO'}" style="margin-top: 1%;">
-                            <button type="submit" class="btn btn-primary">Salvar</button>
-                        </div>
-                    </div>
-                    <div class="actions-section">
-                        <h3>Ações</h3>
-                        <div class="action-buttons">
-                            <button th:if="${requisicao.status.name() == 'PENDENTE'}" class="btn btn-success" onclick="aprovarRequisicao()">
-                                <i class="fas fa-check"></i>
-                                Aprovar
-                            </button>
-                            <button th:if="${requisicao.status.name() == 'PENDENTE'}" class="btn btn-danger" onclick="rejeitarRequisicao()">
-                                <i class="fas fa-times"></i>
-                                Rejeitar
-                            </button>
-                            <button th:if="${requisicao.status.name() == 'APROVADA'}" class="btn btn-info" onclick="iniciarCotacao()">
-                                <i class="fas fa-search"></i>
-                                Iniciar Cotação
-                            </button>
-                            <button th:if="${requisicao.status.name() == 'EM_COTACAO'}" class="btn btn-warning" onclick="realizarPedido()">
-                                <i class="fas fa-shopping-cart"></i>
-                                Realizar Pedido
-                            </button>
-                        </div>
-                    </div>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+<section layout:fragment="content">
+    <main class="main">
+        <div class="container">
+            <div class="page-header">
+                <h2 th:text="'Requisição ' + ${requisicao.codigo}">Requisição REQ-001</h2>
+                <div class="header-actions">
+                    <a th:href="@{/requisicoes}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Voltar
+                    </a>
                 </div>
             </div>
-        </main>
-        <!-- Modal de confirmação -->
-        <div id="confirmModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="modalTitle">Confirmar Ação</h3>
-                    <span class="close" onclick="fecharModal()">&times;</span>
+            <div class="requisicao-details">
+                <div class="details-grid">
+                    <div class="detail-card">
+                        <h3>Informações Básicas</h3>
+                        <div class="detail-row">
+                            <span class="label">Código:</span>
+                            <span class="value" th:text="${requisicao.codigo}">REQ-001</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Status:</span>
+                            <span class="status-badge" th:classappend="${requisicao.status}"
+                                th:text="${requisicao.status}">Pendente</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Departamento:</span>
+                            <span class="value" th:text="${requisicao.departamento}">TI</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Criado por:</span>
+                            <span class="value" th:text="${requisicao.getNomeUsuario}">João Silva</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Data de Criação:</span>
+                            <span class="value"
+                                th:text="${#temporals.format(requisicao.dataCriacao, 'dd/MM/yyyy HH:mm')}">15/01/2024
+                                10:30</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Prazo de Entrega:</span>
+                            <span class="value"
+                                th:text="${#temporals.format(requisicao.prazoEntrega, 'dd/MM/yyyy')}">30/01/2024</span>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Finalidade</h3>
+                        <p th:text="${requisicao.finalidadeDaCompra}">Aquisição de material de escritório para o
+                            departamento de TI.</p>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <p id="modalMessage">Tem certeza que deseja realizar esta ação?</p>
+                <div class="items-section">
+                    <h3>Itens da Requisição</h3>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantidade</th>
+                                    <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 1</th>
+                                    <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 2</th>
+                                    <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 3</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr th:each="item : ${requisicao.itens}">
+                                    <td th:text="${item.nome}">Papel A4</td>
+                                    <td th:text="${item.quantidade + ' ' + item.unidadeMedida}">10</td>
+                                    <td th:if="${requisicao.status.name() == 'EM_COTACAO'}">
+                                        <input type="text" class="form-control" th:value="${item.cotacao1}">
+                                    </td>
+                                    <td th:if="${requisicao.status.name() == 'EM_COTACAO'}">
+                                        <input type="text" class="form-control" th:value="${item.cotacao2}">
+                                    </td>
+                                    <td th:if="${requisicao.status.name() == 'EM_COTACAO'}">
+                                        <input type="text" class="form-control" th:value="${item.cotacao3}">
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(requisicao.itens)}">
+                                    <td th:attr="colspan=${requisicao.status.name() == 'EM_COTACAO'} ? 5 : 3"
+                                        class="text-center">Nenhum item cadastrado</td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                    <div th:if="${requisicao.status.name() == 'EM_COTACAO'}" style="margin-top: 1%;">
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
-                    <button id="confirmButton" class="btn btn-primary">Confirmar</button>
+                <div class="actions-section">
+                    <h3>Ações</h3>
+                    <div class="action-buttons">
+                        <form th:if="${requisicao.status.name() == 'PENDENTE'}"
+                            th:action="@{/requisicoes/{id}/aprovar(id=${requisicao.id})}" method="post"
+                            style="display:inline">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-check"></i> Aprovar
+                            </button>
+                            <!-- CSRF (se habilitado): -->
+                            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+                        </form>
+
+                        <form th:if="${requisicao.status.name() == 'PENDENTE'}"
+                            th:action="@{/requisicoes/{id}/rejeitar(id=${requisicao.id})}" method="post"
+                            style="display:inline">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-times"></i> Rejeitar
+                            </button>
+                            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+                        </form>
+
+                        <form th:if="${requisicao.status.name() == 'EM_COTACAO'}"
+                            th:action="@{/requisicoes/{id}/realizar-pedido(id=${requisicao.id})}" method="post"
+                            style="display:inline">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-shopping-cart"></i> Realizar Pedido
+                            </button>
+                            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+                        </form>
+
+                        <!-- Se quiser manter um botão para iniciar cotação manualmente -->
+                        <form th:if="${requisicao.status.name() == 'PENDENTE'}"
+                            th:action="@{/requisicoes/{id}/iniciar-cotacao(id=${requisicao.id})}" method="post"
+                            style="display:inline">
+                            <button type="submit" class="btn btn-info">
+                                <i class="fas fa-search"></i> Iniciar Cotação
+                            </button>
+                            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    
+    </main>
+    <!-- Modal de confirmação -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Confirmar Ação</h3>
+                <span class="close" onclick="fecharModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage">Tem certeza que deseja realizar esta ação?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+                <button id="confirmButton" class="btn btn-primary">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
 
     <script src="js/main.js"></script>
     <script>
         function aprovarRequisicao() {
-            mostrarModal('Aprovar Requisição', 'Tem certeza que deseja aprovar esta requisição?', function() {
-                // Aqui você faria a chamada para aprovar a requisição
-                window.location.href = '/requisicoes/' + /*[[${requisicao.id}]]*/ + '/aprovar';
+            mostrarModal('Aprovar Requisição', 'Tem certeza que deseja aprovar esta requisição?', function () {
+                
             });
         }
 
         function rejeitarRequisicao() {
-            mostrarModal('Rejeitar Requisição', 'Tem certeza que deseja rejeitar esta requisição?', function() {
-                // Aqui você faria a chamada para rejeitar a requisição
-                window.location.href = '/requisicoes/' + /*[[${requisicao.id}]]*/ + '/rejeitar';
+            mostrarModal('Rejeitar Requisição', 'Tem certeza que deseja rejeitar esta requisição?', function () {
+                
             });
         }
 
         function iniciarCotacao() {
-            mostrarModal('Iniciar Cotação', 'Tem certeza que deseja iniciar o processo de cotação?', function() {
-                // Aqui você faria a chamada para iniciar cotação
-                window.location.href = '/requisicoes/' + /*[[${requisicao.id}]]*/ + '/iniciar-cotacao';
+            mostrarModal('Iniciar Cotação', 'Tem certeza que deseja iniciar o processo de cotação?', function () {
+                
             });
         }
 
         function realizarPedido() {
-            mostrarModal('Realizar Pedido', 'Tem certeza que deseja realizar o pedido?', function() {
-                // Aqui você faria a chamada para realizar pedido
-                window.location.href = '/requisicoes/' + /*[[${requisicao.id}]]*/ + '/realizar-pedido';
+            mostrarModal('Realizar Pedido', 'Tem certeza que deseja realizar o pedido?', function () {
+                
             });
         }
 
         function mostrarModal(title, message, callback) {
             document.getElementById('modalTitle').textContent = title;
             document.getElementById('modalMessage').textContent = message;
-            document.getElementById('confirmButton').onclick = function() {
+            document.getElementById('confirmButton').onclick = function () {
                 callback();
                 fecharModal();
             };
@@ -174,6 +197,6 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layo
             document.getElementById('confirmModal').style.display = 'none';
         }
     </script>
-    </section>
-</html>
+</section>
 
+</html>

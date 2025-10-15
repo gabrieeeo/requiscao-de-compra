@@ -22,9 +22,17 @@ public class RequisicaoService {
         return requisicaoRepository.findAll();
     }
 
+    @Transactional
     public RequisicaoModel save(RequisicaoModel requisicao) {
-        requisicao.setStatus(StatusEnum.PENDENTE);
-        return requisicaoRepository.save(requisicao);
+        if (requisicao.getStatus() == null || requisicao.getStatus().name().isBlank()) {
+            requisicao.setStatus(StatusEnum.PENDENTE);
+        }
+        RequisicaoModel salvo = requisicaoRepository.save(requisicao);
+        if (salvo.getCodigo() == null || salvo.getCodigo().isBlank()) {
+            salvo.setCodigo(String.format("REQ-%d", salvo.getId()));
+            salvo = requisicaoRepository.save(salvo);
+        }
+        return salvo;
     }
 
     public void delete(RequisicaoModel requisicao) {
@@ -33,18 +41,5 @@ public class RequisicaoService {
 
     public RequisicaoModel findById(Long id) {
         return requisicaoRepository.findById(id).orElse(null);
-    }
-
-    @Transactional
-    public RequisicaoModel salvarNova(RequisicaoModel requisicao) {
-        requisicao = save(requisicao);
-        if (requisicao.getCodigo() == null || requisicao.getCodigo().isBlank()) {
-            requisicao.setCodigo(String.format("REQ-%d", requisicao.getId()));
-        }
-        // status inicial se nulo
-        if (requisicao.getStatus() == null) {
-            // evitar depender de enum default ausente; pode ajustar depois
-        }
-        return save(requisicao);
     }
 }
