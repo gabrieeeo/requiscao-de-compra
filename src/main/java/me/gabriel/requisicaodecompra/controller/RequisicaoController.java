@@ -8,11 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.validation.Valid;
 import me.gabriel.requisicaodecompra.enums.DepartamentoEnum;
-import me.gabriel.requisicaodecompra.enums.StatusEnum;
 import me.gabriel.requisicaodecompra.model.ItemModel;
 import me.gabriel.requisicaodecompra.model.RequisicaoModel;
 import me.gabriel.requisicaodecompra.service.RequisicaoService;
@@ -53,11 +53,20 @@ public class RequisicaoController {
             itens.removeIf(i -> (i.getNome() == null || i.getNome().isBlank()));
             itens.forEach(i -> i.setRequisicao(requisicao));
         }
-        requisicao.setStatus(StatusEnum.PENDENTE);
+        
         if (authentication != null && authentication.getPrincipal() instanceof me.gabriel.requisicaodecompra.model.UsuarioModel usuario) {
             requisicao.setCriadoPor(usuario);
         }
         requisicaoService.salvarNova(requisicao);
+        return "redirect:/requisicoes";
+    }
+
+    @PostMapping("/requisicoes/{id}/excluir")
+    public String excluir(@PathVariable Long id) {
+        RequisicaoModel requisicao = requisicaoService.findById(id);
+        if (requisicao != null) {
+            requisicaoService.delete(requisicao);
+        }
         return "redirect:/requisicoes";
     }
 }

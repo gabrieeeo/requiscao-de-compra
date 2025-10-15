@@ -125,4 +125,7 @@ public class RequisicaoModel {
     public void setItens(List<ItemModel> itens) {
         this.itens = itens;
     }
+    public String getNomeUsuario() {
+        return criadoPor != null ? criadoPor.getNome() : "Desconhecido";
+    }
 }

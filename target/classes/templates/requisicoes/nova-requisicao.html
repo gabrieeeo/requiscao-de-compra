@@ -21,21 +21,18 @@
                     <label for="departamento">Departamento *</label>
                     <select id="departamento" th:field="*{departamento}" required>
                         <option value="">Selecione o departamento</option>
-                        <option th:each="dep : ${departamentos}" th:value="${dep}" th:text="${dep}"></option>
+                        <option th:each="dep : ${departamentos}" th:value="${dep}" th:text="${dep.descricao}"></option>
                     </select>
-                    <div class="error-message" th:if="${#fields.hasErrors('departamento')}" th:errors="*{departamento}"></div>
                 </div>
                 <div class="form-group">
                     <label for="prazoEntrega">Prazo de Entrega *</label>
                     <input type="date" id="prazoEntrega" th:field="*{prazoEntrega}" required>
-                    <div class="error-message" th:if="${#fields.hasErrors('prazoEntrega')}" th:errors="*{prazoEntrega}"></div>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group full-width">
                     <label for="finalidadeDaCompra">Finalidade *</label>
                     <textarea id="finalidadeDaCompra" th:field="*{finalidadeDaCompra}" required placeholder="Descreva a finalidade da requisição" rows="3"></textarea>
-                    <div class="error-message" th:if="${#fields.hasErrors('finalidadeDaCompra')}" th:errors="*{finalidadeDaCompra}"></div>
                 </div>
             </div>
         </div>
