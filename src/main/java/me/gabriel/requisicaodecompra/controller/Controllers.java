@@ -10,11 +10,4 @@ public class Controllers {
     public String dashboard() {
         return "inicio/dashboard";
     }
-
-    
-
-    @GetMapping("/detalhes-requisicao/")
-    public String detalhesRequisicao() {
-        return "requisicoes/detalhes-requisicao";
-    }
 }

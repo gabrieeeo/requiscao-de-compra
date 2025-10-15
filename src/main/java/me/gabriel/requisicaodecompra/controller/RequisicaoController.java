@@ -69,4 +69,11 @@ public class RequisicaoController {
         }
         return "redirect:/requisicoes";
     }
+
+    @GetMapping("/requisicoes/{id}")
+    public String detalhesRequisicao(@PathVariable Long id, Model model) {
+        RequisicaoModel requisicao = requisicaoService.findById(id);
+        model.addAttribute("requisicao", requisicao);
+        return "requisicoes/detalhes-requisicao";
+    }
 }
