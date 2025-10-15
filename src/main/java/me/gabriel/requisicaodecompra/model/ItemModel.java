@@ -27,6 +27,10 @@ public class ItemModel {
     private Integer quantidade;
     private String unidadeMedida;
 
+    private String cotacao1;
+    private String cotacao2;
+    private String cotacao3;
+
     @ManyToOne
     @JoinColumn(name = "requisicao_id")
     private RequisicaoModel requisicao;
@@ -70,6 +74,30 @@ public class ItemModel {
 
     public void setRequisicao(RequisicaoModel requisicao) {
         this.requisicao = requisicao;
+    }
+
+    public String getCotacao1() {
+        return cotacao1;
+    }
+
+    public void setCotacao1(String cotacao1) {
+        this.cotacao1 = cotacao1;
+    }
+
+    public String getCotacao2() {
+        return cotacao2;
+    }
+
+    public void setCotacao2(String cotacao2) {
+        this.cotacao2 = cotacao2;
+    }
+
+    public String getCotacao3() {
+        return cotacao3;
+    }
+
+    public void setCotacao3(String cotacao3) {
+        this.cotacao3 = cotacao3;
     }
 
 }

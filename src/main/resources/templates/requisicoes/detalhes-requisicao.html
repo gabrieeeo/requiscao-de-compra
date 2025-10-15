@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
-<body>
-
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
     <section layout:fragment="content">
         <main class="main">
             <div class="container">
@@ -11,10 +10,6 @@
                         <a th:href="@{/requisicoes}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i>
                             Voltar
-                        </a>
-                        <a th:href="@{/requisicoes/{id}/editar(id=${requisicao.id})}" class="btn btn-primary">
-                            <i class="fas fa-edit"></i>
-                            Editar
                         </a>
                     </div>
                 </div>
@@ -36,7 +31,7 @@
                             </div>
                             <div class="detail-row">
                                 <span class="label">Criado por:</span>
-                                <span class="value" th:text="${requisicao.criadoPor}">João Silva</span>
+                                <span class="value" th:text="${requisicao.getNomeUsuario}">João Silva</span>
                             </div>
                             <div class="detail-row">
                                 <span class="label">Data de Criação:</span>
@@ -60,37 +55,55 @@
                                     <tr>
                                         <th>Item</th>
                                         <th>Quantidade</th>
-                                        <th>Descrição</th>
+                                        <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 1</th>
+                                        <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 2</th>
+                                        <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 3</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    
                                     <tr th:each="item : ${requisicao.itens}">
                                         <td th:text="${item.nome}">Papel A4</td>
-                                        <td th:text="${item.quantidade}">10</td>
+                                        <td th:text="${item.quantidade + ' ' + item.unidadeMedida}">10</td>
+                                        <td th:if="${requisicao.status.name() == 'EM_COTACAO'}">
+                                            <input type="text" class="form-control" th:value="${item.cotacao1}">
+                                        </td>
+                                        <td th:if="${requisicao.status.name() == 'EM_COTACAO'}">
+                                            <input type="text" class="form-control" th:value="${item.cotacao2}">
+                                        </td>
+                                        <td th:if="${requisicao.status.name() == 'EM_COTACAO'}">
+                                            <input type="text" class="form-control" th:value="${item.cotacao3}">
+                                        </td>
                                     </tr>
                                     <tr th:if="${#lists.isEmpty(requisicao.itens)}">
-                                        <td colspan="3" class="text-center">Nenhum item cadastrado</td>
+                                        <td th:attr="colspan=${requisicao.status.name() == 'EM_COTACAO'} ? 5 : 3" class="text-center">Nenhum item cadastrado</td>
                                     </tr>
+                                    
                                 </tbody>
+                                
                             </table>
+                            
+                        </div>
+                        <div th:if="${requisicao.status.name() == 'EM_COTACAO'}" style="margin-top: 1%;">
+                            <button type="submit" class="btn btn-primary">Salvar</button>
                         </div>
                     </div>
                     <div class="actions-section">
                         <h3>Ações</h3>
                         <div class="action-buttons">
-                            <button th:if="${requisicao.status == 'PENDENTE'}" class="btn btn-success" onclick="aprovarRequisicao()">
+                            <button th:if="${requisicao.status.name() == 'PENDENTE'}" class="btn btn-success" onclick="aprovarRequisicao()">
                                 <i class="fas fa-check"></i>
                                 Aprovar
                             </button>
-                            <button th:if="${requisicao.status == 'PENDENTE'}" class="btn btn-danger" onclick="rejeitarRequisicao()">
+                            <button th:if="${requisicao.status.name() == 'PENDENTE'}" class="btn btn-danger" onclick="rejeitarRequisicao()">
                                 <i class="fas fa-times"></i>
                                 Rejeitar
                             </button>
-                            <button th:if="${requisicao.status == 'APROVADA'}" class="btn btn-info" onclick="iniciarCotacao()">
+                            <button th:if="${requisicao.status.name() == 'APROVADA'}" class="btn btn-info" onclick="iniciarCotacao()">
                                 <i class="fas fa-search"></i>
                                 Iniciar Cotação
                             </button>
-                            <button th:if="${requisicao.status == 'EM_COTACAO'}" class="btn btn-warning" onclick="realizarPedido()">
+                            <button th:if="${requisicao.status.name() == 'EM_COTACAO'}" class="btn btn-warning" onclick="realizarPedido()">
                                 <i class="fas fa-shopping-cart"></i>
                                 Realizar Pedido
                             </button>
@@ -115,7 +128,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    
 
     <script src="js/main.js"></script>
     <script>
@@ -161,6 +174,6 @@
             document.getElementById('confirmModal').style.display = 'none';
         }
     </script>
-</body>
+    </section>
 </html>
 

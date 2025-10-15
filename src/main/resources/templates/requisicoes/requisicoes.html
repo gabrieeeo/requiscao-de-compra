@@ -69,10 +69,6 @@
                                 title="Visualizar">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a th:href="@{/requisicoes/{id}/editar(id=${requisicao.id})}"
-                                class="btn btn-sm btn-secondary" title="Editar">
-                                <i class="fas fa-edit"></i>
-                            </a>
                             <button class="btn btn-sm btn-danger"
                                 th:attr="data-codigo=${requisicao.codigo}, data-id=${requisicao.id}"
                                 onclick="confirmarExclusao(this.dataset.codigo, this.dataset.id)" title="Excluir">
