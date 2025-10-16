@@ -134,6 +134,28 @@
 
                 </form>
 
+                <div class="items-section">
+                    <h3>Pedidos</h3>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Pedido 1</th>
+                                    <th>Pedido 2</th>
+                                    <th>Pedido 3</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td th:text="${requisicao.pedido1}"></td>
+                                    <td th:text="${requisicao.pedido2}"></td>
+                                    <td th:text="${requisicao.pedido3}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <div class="items-section" th:if="${requisicao.status.name() != 'EM_COTACAO'}">
                     <h3>Itens da Requisição</h3>
                     <div class="table-container">
@@ -165,7 +187,8 @@
                 </div>
 
 
-                <div class="actions-section" th:if="${requisicao.status.name() != 'EM_COTACAO'} and ${requisicao.status.name() != 'FINALIZADA'}">
+                <div class="actions-section"
+                    th:if="${requisicao.status.name() != 'EM_COTACAO'} and ${requisicao.status.name() != 'FINALIZADA'}">
                     <h3>Ações</h3>
                     <div class="action-buttons">
                         <form th:if="${requisicao.status.name() == 'PENDENTE'}"
@@ -192,11 +215,9 @@
                 <div class="actions-section" th:if="${requisicao.status.name() == 'FINALIZADA'}">
                     <h3>Ações</h3>
                     <div class="action-buttons">
-                        <form
-                            th:action="@{/requisicoes/{id}/rejeitar(id=${requisicao.id})}" method="post"
-                            style="display:inline">
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-times"></i> Imprimir
+                        <form style="display:inline">
+                            <button type="submit" class="btn btn-info">
+                                <i class="fas fa-print"></i> Imprimir
                             </button>
                             <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
                         </form>
