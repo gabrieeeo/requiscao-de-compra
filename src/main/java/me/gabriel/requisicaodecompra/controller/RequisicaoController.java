@@ -54,7 +54,6 @@ public class RequisicaoController {
 
         // dados para filtros
         model.addAttribute("departamentos", DepartamentoEnum.values());
-        model.addAttribute("statusList", StatusEnum.values());
 
         // Não sobrescreva o atributo especial 'param' do Thymeleaf; use o built-in ${param.*} na view
 
