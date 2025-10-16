@@ -132,4 +132,33 @@ public class RequisicaoController {
         }
         return "redirect:/requisicoes/{id}";
     }
+
+    @PostMapping("/requisicoes/{id}/atualizar")
+    public String atualizar(@PathVariable Long id, @ModelAttribute("requisicao") RequisicaoModel form) {
+        RequisicaoModel r = requisicaoService.findById(id);
+        if (r != null && r.getStatus() == StatusEnum.EM_COTACAO) {
+            r.setPedido1(form.getPedido1());
+            r.setPedido2(form.getPedido2());
+            r.setPedido3(form.getPedido3());
+            Map<Long, ItemModel> itensPorId = r.getItens().stream()
+            .filter(i -> i.getId() != null)
+            .collect(Collectors.toMap(ItemModel::getId, 
+            Function.identity()));
+
+            if (form.getItens() != null) {
+                for (ItemModel itForm : form.getItens()) {
+                    if (itForm.getId() == null) continue;
+                    ItemModel itDestino = itensPorId.get(itForm.getId());
+                    if (itDestino != null) {
+                        itDestino.setCotacao1(itForm.getCotacao1());
+                        itDestino.setCotacao2(itForm.getCotacao2());
+                        itDestino.setCotacao3(itForm.getCotacao3());
+                    }
+                }
+            }
+            requisicaoService.save(r);
+        }
+        return "redirect:/requisicoes/{id}";
+    }
+
 }

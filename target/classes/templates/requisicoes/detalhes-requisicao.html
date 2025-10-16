@@ -129,6 +129,11 @@
                             <button type="submit" class="btn btn-warning">
                                 <i class="fas fa-shopping-cart"></i> Finalizar
                             </button>
+                            <button type="submit" class="btn btn-info"
+                                th:formaction="@{/requisicoes/{id}/atualizar(id=${requisicao.id})}">
+                                <i class="fas fa-sync"></i>
+                                Atualizar
+                            </button>
                         </div>
                     </div>
 
@@ -225,9 +230,6 @@
 
             </div>
     </main>
-
-
-    <script src="js/main.js"></script>
 </section>
 
 </html>
