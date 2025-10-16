@@ -1,6 +1,9 @@
 package me.gabriel.requisicaodecompra.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -102,9 +105,28 @@ public class RequisicaoController {
     }
 
     @PostMapping("/requisicoes/{id}/finalizar")
-    public String finalizar(@PathVariable Long id) {
+    public String finalizar(@PathVariable Long id, @ModelAttribute("requisicao") RequisicaoModel form) {
         RequisicaoModel r = requisicaoService.findById(id);
         if (r != null && r.getStatus() == StatusEnum.EM_COTACAO) {
+            r.setPedido1(form.getPedido1());
+            r.setPedido2(form.getPedido2());
+            r.setPedido3(form.getPedido3());
+            Map<Long, ItemModel> itensPorId = r.getItens().stream()
+            .filter(i -> i.getId() != null)
+            .collect(Collectors.toMap(ItemModel::getId, 
+            Function.identity()));
+
+            if (form.getItens() != null) {
+                for (ItemModel itForm : form.getItens()) {
+                    if (itForm.getId() == null) continue;
+                    ItemModel itDestino = itensPorId.get(itForm.getId());
+                    if (itDestino != null) {
+                        itDestino.setCotacao1(itForm.getCotacao1());
+                        itDestino.setCotacao2(itForm.getCotacao2());
+                        itDestino.setCotacao3(itForm.getCotacao3());
+                    }
+                }
+            }
             r.setStatus(StatusEnum.FINALIZADA);
             requisicaoService.save(r);
         }

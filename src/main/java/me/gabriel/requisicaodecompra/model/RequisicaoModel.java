@@ -49,7 +49,9 @@ public class RequisicaoModel {
     @Size(max = 500, message = "Finalidade pode ter no máximo 500 caracteres")
     private String finalidadeDaCompra;
 
-    private String pedido;
+    private String pedido1;
+    private String pedido2;
+    private String pedido3;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @CreatedBy
@@ -83,8 +85,14 @@ public class RequisicaoModel {
     public String getFinalidadeDaCompra() {
         return finalidadeDaCompra;
     }
-    public String getPedidoDeCompra() {
-        return pedidoDeCompra;
+    public String getPedido1() {
+        return pedido1;
+    }
+    public String getPedido2() {
+        return pedido2;
+    }
+    public String getPedido3() {
+        return pedido3;
     }
     public UsuarioModel getCriadoPor() {
         return criadoPor;
@@ -113,8 +121,14 @@ public class RequisicaoModel {
     public void setFinalidadeDaCompra(String finalidadeDaCompra) {
         this.finalidadeDaCompra = finalidadeDaCompra;
     }
-    public void setPedidoDeCompra(String pedidoDeCompra) {
-        this.pedidoDeCompra = pedidoDeCompra;
+    public void setPedido1(String pedido1) {
+        this.pedido1 = pedido1;
+    }
+    public void setPedido2(String pedido2) {
+        this.pedido2 = pedido2;
+    }
+    public void setPedido3(String pedido3) {
+        this.pedido3 = pedido3;
     }
     public void setCriadoPor(UsuarioModel criadoPor) {
         this.criadoPor = criadoPor;

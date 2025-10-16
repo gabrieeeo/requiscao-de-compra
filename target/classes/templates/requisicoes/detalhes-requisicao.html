@@ -13,7 +13,7 @@
                     </a>
                 </div>
             </div>
-            <div class="requisicao-details" th:with="emCotacao=${requisicao.status.name() == 'EM_COTACAO'}">
+            <div class="requisicao-details">
                 <div class="details-grid">
                     <div class="detail-card">
                         <h3>Informações Básicas</h3>
@@ -51,23 +51,90 @@
                         <p th:text="${requisicao.finalidadeDaCompra}">Aquisição de material de escritório para o
                             departamento de TI.</p>
                     </div>
-                    <div class="detail-card">
+                </div>
+                <form th:if="${requisicao.status.name() == 'EM_COTACAO'}"
+                    th:action="@{/requisicoes/{id}/finalizar(id=${requisicao.id})}" th:object="${requisicao}"
+                    method="post" class="requisicao-details">
+                    <div class="items-section">
                         <h3>Pedidos</h3>
-                        <div>
-                            <label for="pedido1">Pedido 1</label>
-                            <input type="text" id="pedido1" class="form-control" />
-                        </div>
-                        <div>
-                            <label for="pedido2">Pedido 2</label>
-                            <input type="text" id="pedido2" class="form-control" />
-                        </div>
-                        <div>
-                            <label for="pedido3">Pedido 3</label>
-                            <input type="text" id="pedido2" class="form-control" />
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Pedido 1</th>
+                                        <th>Pedido 2</th>
+                                        <th>Pedido 3</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" th:value="${requisicao.pedido1}"
+                                                th:field="*{pedido1}">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" th:value="${requisicao.pedido2}"
+                                                th:field="*{pedido2}">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" th:value="${requisicao.pedido3}"
+                                                th:field="*{pedido3}">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div>
-                <div class="items-section">
+                    <div class="items-section">
+                        <h3>Itens da Requisição</h3>
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Quantidade</th>
+                                        <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 1</th>
+                                        <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 2</th>
+                                        <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 3</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="item, itStat : *{itens}">
+                                        <!-- preserve o ID do item para o binding no servidor -->
+                                        <input type="hidden" th:field="*{itens[__${itStat.index}__].id}" />
+
+                                        <td th:text="*{itens[__${itStat.index}__].nome}">Papel A4</td>
+                                        <td
+                                            th:text="*{itens[__${itStat.index}__].quantidade} + ' ' + *{itens[__${itStat.index}__].unidadeMedida}">
+                                            10</td>
+
+                                        <td><input type="text" class="form-control"
+                                                th:field="*{itens[__${itStat.index}__].cotacao1}" /></td>
+                                        <td><input type="text" class="form-control"
+                                                th:field="*{itens[__${itStat.index}__].cotacao2}" /></td>
+                                        <td><input type="text" class="form-control"
+                                                th:field="*{itens[__${itStat.index}__].cotacao3}" /></td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(requisicao.itens)}">
+                                        <td colspan="5" class="text-center">Nenhum item cadastrado</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="actions-section">
+                        <h3>Ações</h3>
+                        <div class="action-buttons">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-shopping-cart"></i> Finalizar
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+
+                <div class="items-section" th:if="${requisicao.status.name() != 'EM_COTACAO'}">
                     <h3>Itens da Requisição</h3>
                     <div class="table-container">
                         <table class="table">
@@ -75,38 +142,30 @@
                                 <tr>
                                     <th>Item</th>
                                     <th>Quantidade</th>
-                                    <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 1</th>
-                                    <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 2</th>
-                                    <th th:if="${requisicao.status.name() == 'EM_COTACAO'}">Cotação 3</th>
+                                    <th>Cotação 1</th>
+                                    <th>Cotação 2</th>
+                                    <th>Cotação 3</th>
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <tr th:each="item : ${requisicao.itens}">
                                     <td th:text="${item.nome}">Papel A4</td>
                                     <td th:text="${item.quantidade + ' ' + item.unidadeMedida}">10</td>
-                                    <td th:if="${requisicao.status.name() == 'EM_COTACAO'}">
-                                        <input type="text" class="form-control" th:value="${item.cotacao1}">
-                                    </td>
-                                    <td th:if="${requisicao.status.name() == 'EM_COTACAO'}">
-                                        <input type="text" class="form-control" th:value="${item.cotacao2}">
-                                    </td>
-                                    <td th:if="${requisicao.status.name() == 'EM_COTACAO'}">
-                                        <input type="text" class="form-control" th:value="${item.cotacao3}">
-                                    </td>
+                                    <td th:text="${item.cotacao1}">R$ 50,00</td>
+                                    <td th:text="${item.cotacao2}">R$ 55,00</td>
+                                    <td th:text="${item.cotacao3}">R$ 60,00</td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(requisicao.itens)}">
                                     <td th:attr="colspan=${requisicao.status.name() == 'EM_COTACAO'} ? 5 : 3"
                                         class="text-center">Nenhum item cadastrado</td>
                                 </tr>
-
                             </tbody>
-
                         </table>
-
                     </div>
                 </div>
-                <div class="actions-section">
+
+
+                <div class="actions-section" th:if="${requisicao.status.name() != 'EM_COTACAO'} and ${requisicao.status.name() != 'FINALIZADA'}">
                     <h3>Ações</h3>
                     <div class="action-buttons">
                         <form th:if="${requisicao.status.name() == 'PENDENTE'}"
@@ -114,15 +173,6 @@
                             style="display:inline">
                             <button type="submit" class="btn btn-danger">
                                 <i class="fas fa-times"></i> Rejeitar
-                            </button>
-                            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
-                        </form>
-
-                        <form th:if="${requisicao.status.name() == 'EM_COTACAO'}"
-                            th:action="@{/requisicoes/{id}/finalizar(id=${requisicao.id})}" method="post"
-                            style="display:inline">
-                            <button type="submit" class="btn btn-warning">
-                                <i class="fas fa-shopping-cart"></i> Finalizar
                             </button>
                             <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
                         </form>
@@ -138,8 +188,22 @@
                         </form>
                     </div>
                 </div>
+
+                <div class="actions-section" th:if="${requisicao.status.name() == 'FINALIZADA'}">
+                    <h3>Ações</h3>
+                    <div class="action-buttons">
+                        <form
+                            th:action="@{/requisicoes/{id}/rejeitar(id=${requisicao.id})}" method="post"
+                            style="display:inline">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-times"></i> Imprimir
+                            </button>
+                            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+                        </form>
+                    </div>
+                </div>
+
             </div>
-        </div>
     </main>
 
 
