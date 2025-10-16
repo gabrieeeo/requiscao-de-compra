@@ -89,19 +89,15 @@
         <a th:if="${currentPage > 0}"
             th:href="@{/requisicoes(page=${currentPage - 1}, status=${param.status}, departamento=${param.departamento}, search=${param.search})}"
             class="btn btn-secondary">
-            <i class="fas fa-chevron-left"></i>
-            Anterior
+            <i class="fas fa-chevron-left"></i> Anterior
         </a>
-
         <span class="page-info">
             Página <span th:text="${currentPage + 1}">1</span> de <span th:text="${totalPages}">1</span>
         </span>
-
         <a th:if="${currentPage < totalPages - 1}"
             th:href="@{/requisicoes(page=${currentPage + 1}, status=${param.status}, departamento=${param.departamento}, search=${param.search})}"
             class="btn btn-secondary">
-            Próxima
-            <i class="fas fa-chevron-right"></i>
+            Próxima <i class="fas fa-chevron-right"></i>
         </a>
     </div>
 
@@ -119,7 +115,7 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
                 <form id="deleteForm" method="post" style="display: inline;">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <button type="submit" class="btn btn-danger">Excluir</button>
                 </form>
             </div>

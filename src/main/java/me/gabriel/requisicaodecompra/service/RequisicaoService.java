@@ -2,9 +2,12 @@ package me.gabriel.requisicaodecompra.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import me.gabriel.requisicaodecompra.enums.DepartamentoEnum;
 import me.gabriel.requisicaodecompra.enums.StatusEnum;
 import me.gabriel.requisicaodecompra.model.RequisicaoModel;
 import me.gabriel.requisicaodecompra.repository.RequisicaoRepository;
@@ -90,5 +93,14 @@ public class RequisicaoService {
         public long getRejeitada() {
             return rejeitada;
         }
+    }
+
+    public Page<RequisicaoModel> buscarComFiltros(StatusEnum status,
+            DepartamentoEnum departamento,
+            String search,
+            Pageable pageable) {
+        // Normaliza search: vazio -> null
+        String term = (search == null || search.isBlank()) ? null : search.trim();
+        return requisicaoRepository.findWithFilters(status, departamento, term, pageable);
     }
 }

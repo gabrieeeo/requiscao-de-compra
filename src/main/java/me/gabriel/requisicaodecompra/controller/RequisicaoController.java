@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 import me.gabriel.requisicaodecompra.enums.DepartamentoEnum;
@@ -29,10 +33,36 @@ public class RequisicaoController {
     public RequisicaoController(RequisicaoService requisicaoService) {
         this.requisicaoService = requisicaoService;
     }
-
+    
     @GetMapping("/requisicoes")
-    public String requisicoes(Model model) {
-        model.addAttribute("requisicoes", requisicaoService.findAll());
+    public String listar(
+        @RequestParam(required = false) StatusEnum status,
+        @RequestParam(required = false) DepartamentoEnum departamento,
+        @RequestParam(required = false) String search,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        Model model
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<RequisicaoModel> pageResult = requisicaoService.buscarComFiltros(status, departamento, search, pageable);
+
+        model.addAttribute("requisicoes", pageResult.getContent());
+        model.addAttribute("currentPage", pageResult.getNumber());
+        model.addAttribute("totalPages", pageResult.getTotalPages());
+        model.addAttribute("totalElements", pageResult.getTotalElements());
+        model.addAttribute("pageSize", pageResult.getSize());
+
+        // dados para filtros
+        model.addAttribute("departamentos", DepartamentoEnum.values());
+        model.addAttribute("statusList", StatusEnum.values());
+
+        // manter parâmetros na view
+        model.addAttribute("param", new Object() {
+            public StatusEnum status() { return status; }
+            public DepartamentoEnum departamento() { return departamento; }
+            public String search() { return search; }
+        });
+
         return "requisicoes/requisicoes";
     }
 
