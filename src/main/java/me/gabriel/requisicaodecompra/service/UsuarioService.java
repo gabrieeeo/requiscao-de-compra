@@ -23,7 +23,7 @@ public class UsuarioService {
     public void criarUsuarioAdmin() {
         if (usuarioRepository.findByUsername("glima").isEmpty()) {
             UsuarioModel usuario = new UsuarioModel("Gabriel Lima", 
-            "glima", "suporte@mailacosmeticos.com.br", passwordEncoder.encode("16022006"), RoleEnum.ADMIN);
+            "glima", "email@email.com", passwordEncoder.encode("teste"), RoleEnum.ADMIN);
             usuarioRepository.save(usuario);
         }
     }
