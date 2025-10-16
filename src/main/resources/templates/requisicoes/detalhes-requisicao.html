@@ -23,12 +23,12 @@
                         </div>
                         <div class="detail-row">
                             <span class="label">Status:</span>
-                            <span class="status-badge" th:classappend="${requisicao.status}"
-                                th:text="${requisicao.status}">Pendente</span>
+                            <span class="status-badge" th:classappend="${requisicao.status.getDescricao}"
+                                th:text="${requisicao.status.getDescricao}">Pendente</span>
                         </div>
                         <div class="detail-row">
                             <span class="label">Departamento:</span>
-                            <span class="value" th:text="${requisicao.departamento}">TI</span>
+                            <span class="value" th:text="${requisicao.departamento.getDescricao}">TI</span>
                         </div>
                         <div class="detail-row">
                             <span class="label">Criado por:</span>
@@ -134,7 +134,7 @@
 
                 </form>
 
-                <div class="items-section">
+                <div class="items-section" th:if="${requisicao.status.name() != 'EM_COTACAO'}">
                     <h3>Pedidos</h3>
                     <div class="table-container">
                         <table class="table">
@@ -215,12 +215,11 @@
                 <div class="actions-section" th:if="${requisicao.status.name() == 'FINALIZADA'}">
                     <h3>Ações</h3>
                     <div class="action-buttons">
-                        <form style="display:inline">
-                            <button type="submit" class="btn btn-info">
-                                <i class="fas fa-print"></i> Imprimir
-                            </button>
-                            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
-                        </form>
+                        <button type="submit" class="btn btn-info">
+                            <i class="fas fa-print"></i> Imprimir (Em breve)
+                        </button>
+                        <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+
                     </div>
                 </div>
 

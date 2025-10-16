@@ -57,9 +57,9 @@
                     <td th:text="${requisicao.codigo}">REQ-001</td>
                     <td>
                         <span class="status-badge" th:classappend="${requisicao.status}"
-                            th:text="${requisicao.status}">Pendente</span>
+                            th:text="${requisicao.status.getDescricao}">Pendente</span>
                     </td>
-                    <td th:text="${requisicao.departamento}">TI</td>
+                    <td th:text="${requisicao.departamento.getDescricao}">TI</td>
                     <td th:text="${requisicao.getNomeUsuario}">João Silva</td>
                     <td th:text="${#temporals.format(requisicao.dataCriacao, 'dd/MM/yyyy')}">15/01/2024</td>
                     <td th:text="${#temporals.format(requisicao.prazoEntrega, 'dd/MM/yyyy')}">30/01/2024</td>

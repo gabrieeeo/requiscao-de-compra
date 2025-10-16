@@ -159,8 +159,8 @@ body {
     background: linear-gradient(135deg, #f39c12, #e67e22);
 }
 
-.stat-icon.approved {
-    background: linear-gradient(135deg, #3498db, #2980b9);
+.stat-icon.rejected {
+    background: linear-gradient(135deg, #f42415, #b51515);
 }
 
 .stat-icon.inquotation {

@@ -21,17 +21,8 @@
                             <i class="fas fa-clock"></i>
                         </div>
                         <div class="stat-content">
-                            <h3 th:text="${requisicoesPendentes ?: '0'}">0</h3>
+                            <h3 th:text="${stats.pendente ?: '0'}">0</h3>
                             <p>Pendentes</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon approved">
-                            <i class="fas fa-check"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3 th:text="${requisicoesAprovadas ?: '0'}">0</h3>
-                            <p>Aprovadas</p>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -39,8 +30,17 @@
                             <i class="fas fa-money-check-dollar"></i>
                         </div>
                         <div class="stat-content">
-                            <h3 th:text="${requisicoesEmCotacao ?: '0'}">0</h3>
+                            <h3 th:text="${stats.emCotacao ?: '0'}">0</h3>
                             <p>Em cotação</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon rejected">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 th:text="${stats.rejeitada ?: '0'}">0</h3>
+                            <p>Rejeitadas</p>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -48,7 +48,7 @@
                             <i class="fas fa-flag-checkered"></i>
                         </div>
                         <div class="stat-content">
-                            <h3 th:text="${requisicoesFinalizadas ?: '0'}">0</h3>
+                            <h3 th:text="${stats.finalizada ?: '0'}">0</h3>
                             <p>Finalizadas</p>
                         </div>
                     </div>
