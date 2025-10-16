@@ -49,7 +49,7 @@ public class RequisicaoModel {
     @Size(max = 500, message = "Finalidade pode ter no máximo 500 caracteres")
     private String finalidadeDaCompra;
 
-    private String pedidoDeCompra;
+    private String pedido;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @CreatedBy

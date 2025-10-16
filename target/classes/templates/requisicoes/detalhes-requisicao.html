@@ -13,7 +13,7 @@
                     </a>
                 </div>
             </div>
-            <div class="requisicao-details">
+            <div class="requisicao-details" th:with="emCotacao=${requisicao.status.name() == 'EM_COTACAO'}">
                 <div class="details-grid">
                     <div class="detail-card">
                         <h3>Informações Básicas</h3>
@@ -141,41 +141,9 @@
             </div>
         </div>
     </main>
-    <!-- Modal de confirmação -->
-    <div id="confirmModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalTitle">Confirmar Ação</h3>
-                <span class="close" onclick="fecharModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <p id="modalMessage">Tem certeza que deseja realizar esta ação?</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
-                <button id="confirmButton" class="btn btn-primary">Confirmar</button>
-            </div>
-        </div>
-    </div>
 
 
     <script src="js/main.js"></script>
-    <script>
-
-        function mostrarModal(title, message, callback) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalMessage').textContent = message;
-            document.getElementById('confirmButton').onclick = function () {
-                callback();
-                fecharModal();
-            };
-            document.getElementById('confirmModal').style.display = 'block';
-        }
-
-        function fecharModal() {
-            document.getElementById('confirmModal').style.display = 'none';
-        }
-    </script>
 </section>
 
 </html>
