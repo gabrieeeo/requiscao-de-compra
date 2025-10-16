@@ -42,4 +42,8 @@ public class RequisicaoService {
     public RequisicaoModel findById(Long id) {
         return requisicaoRepository.findById(id).orElse(null);
     }
+
+    public long countByStatus(StatusEnum status) {
+        return requisicaoRepository.countByStatus(status);
+    }
 }
