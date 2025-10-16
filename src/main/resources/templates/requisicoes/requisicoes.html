@@ -23,8 +23,8 @@
                 <label for="departamento">Departamento:</label>
                 <select name="departamento" id="departamento">
                     <option value="">Todos</option>
-                    <option th:each="dept : ${departamentos}" th:value="${dept}" th:text="${dept}"
-                        th:selected="${param.departamento == dept}">Departamento</option>
+                    <option th:each="dept : ${departamentos}" th:value="${dept.name()}" th:text="${dept.descricao}"
+                        th:selected="${param.departamento == dept.name()}">Departamento</option>
                 </select>
             </div>
             <div class="filter-group">
@@ -122,7 +122,7 @@
         </div>
     </div>
 
-    <script src="js/main.js"></script>
+    <script th:src="@{/js/main.js}"></script>
 </section>
 
 </html>

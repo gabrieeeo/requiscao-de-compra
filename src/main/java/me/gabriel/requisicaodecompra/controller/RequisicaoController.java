@@ -56,12 +56,7 @@ public class RequisicaoController {
         model.addAttribute("departamentos", DepartamentoEnum.values());
         model.addAttribute("statusList", StatusEnum.values());
 
-        // manter parâmetros na view
-        model.addAttribute("param", new Object() {
-            public StatusEnum status() { return status; }
-            public DepartamentoEnum departamento() { return departamento; }
-            public String search() { return search; }
-        });
+        // Não sobrescreva o atributo especial 'param' do Thymeleaf; use o built-in ${param.*} na view
 
         return "requisicoes/requisicoes";
     }
