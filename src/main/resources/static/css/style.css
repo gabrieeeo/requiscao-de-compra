@@ -268,12 +268,6 @@ body {
     border: 1px solid #ffeaa7;
 }
 
-.status-badge.APROVADA {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
 .status-badge.REJEITADA {
     background-color: #f8d7da;
     color: #721c24;
@@ -286,9 +280,9 @@ body {
     border: 1px solid #bee5eb;
 }
 
-.status-badge.PEDIDO_REALIZADO {
-    background-color: #e2e3e5;
-    color: #383d41;
+.status-badge.FINALIZADA {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: #ffffff;
     border: 1px solid #d6d8db;
 }
 

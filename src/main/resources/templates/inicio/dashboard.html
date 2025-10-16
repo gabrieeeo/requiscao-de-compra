@@ -1,60 +1,105 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layout}">
-    
-    <section layout:fragment="content">
-        <div class="dashboard">
-            <div class="dashboard-header">
-                <h2>Dashboard</h2>
-                <div class="dashboard-stats">
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-file-alt"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3 th:text="${stats.total ?: '0'}">0</h3>
-                            <p>Total</p>
-                        </div>
+
+<section layout:fragment="content">
+    <div class="dashboard">
+        <div class="dashboard-header">
+            <h2>Dashboard</h2>
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-alt"></i>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon pending">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3 th:text="${stats.pendente ?: '0'}">0</h3>
-                            <p>Pendentes</p>
-                        </div>
+                    <div class="stat-content">
+                        <h3 th:text="${stats.total ?: '0'}">0</h3>
+                        <p>Total</p>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon inquotation">
-                            <i class="fas fa-money-check-dollar"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3 th:text="${stats.emCotacao ?: '0'}">0</h3>
-                            <p>Em cotação</p>
-                        </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon pending">
+                        <i class="fas fa-clock"></i>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon rejected">
-                            <i class="fas fa-times"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3 th:text="${stats.rejeitada ?: '0'}">0</h3>
-                            <p>Rejeitadas</p>
-                        </div>
+                    <div class="stat-content">
+                        <h3 th:text="${stats.pendente ?: '0'}">0</h3>
+                        <p>Pendentes</p>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon finished">
-                            <i class="fas fa-flag-checkered"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3 th:text="${stats.finalizada ?: '0'}">0</h3>
-                            <p>Finalizadas</p>
-                        </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon inquotation">
+                        <i class="fas fa-money-check-dollar"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 th:text="${stats.emCotacao ?: '0'}">0</h3>
+                        <p>Em cotação</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon rejected">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 th:text="${stats.rejeitada ?: '0'}">0</h3>
+                        <p>Rejeitadas</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon finished">
+                        <i class="fas fa-flag-checkered"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 th:text="${stats.finalizada ?: '0'}">0</h3>
+                        <p>Finalizadas</p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+    <div class="table-container">
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Status</th>
+                    <th>Departamento</th>
+                    <th>Criado por</th>
+                    <th>Data de Criação</th>
+                    <th>Prazo de Entrega</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="requisicao : ${requisicoes}">
+                    <td th:text="${requisicao.codigo}">REQ-001</td>
+                    <td>
+                        <span class="status-badge" th:classappend="${requisicao.status}"
+                            th:text="${requisicao.status.getDescricao}">Pendente</span>
+                    </td>
+                    <td th:text="${requisicao.departamento.getDescricao}">TI</td>
+                    <td th:text="${requisicao.getNomeUsuario}">João Silva</td>
+                    <td th:text="${#temporals.format(requisicao.dataCriacao, 'dd/MM/yyyy')}">15/01/2024</td>
+                    <td th:text="${#temporals.format(requisicao.prazoEntrega, 'dd/MM/yyyy')}">30/01/2024</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a th:href="@{/requisicoes/{id}(id=${requisicao.id})}" class="btn btn-sm btn-primary"
+                                title="Visualizar">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <button class="btn btn-sm btn-danger"
+                                th:attr="data-codigo=${requisicao.codigo}, data-id=${requisicao.id}"
+                                onclick="confirmarExclusao(this.dataset.codigo, this.dataset.id)" title="Excluir">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(requisicoes)}">
+                    <td colspan="8" class="text-center">Nenhuma requisição encontrada</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
 
 </html>
